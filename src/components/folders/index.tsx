@@ -1,9 +1,25 @@
 "use client";
 
-import { useEffect, useRef, type KeyboardEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type PointerEvent as ReactPointerEvent,
+  type ReactNode,
+} from "react";
 import { ChevronLeft, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import type { FolderId } from "@/types";
+import { education } from "@/data/education";
+import { experience } from "@/data/experience";
+import { projects } from "@/data/projects";
+import type {
+  EducationItem,
+  ExperienceItem,
+  FolderId,
+  MediaItem,
+  Project,
+} from "@/types";
 
 interface FolderLayerProps {
   openFolder: FolderId | null;
@@ -31,22 +47,10 @@ interface DetailWindowProps {
   onClose: () => void;
 }
 
-interface DetailContent {
-  id: string;
-  kind: FolderId;
-  title: string;
-  eyebrow: string;
-  imageSrc: string;
-  summary: string;
-  metadata: Array<{
-    label: string;
-    value: string;
-  }>;
-  actions: Array<{
-    label: string;
-    disabled?: boolean;
-  }>;
-}
+type DetailContent =
+  | { kind: "education"; item: EducationItem }
+  | { kind: "projects"; item: Project }
+  | { kind: "experience"; item: ExperienceItem };
 
 const folderTitles: Record<FolderId, string> = {
   education: "Education",
@@ -110,57 +114,57 @@ function getDetailContent(
   folderId: FolderId,
   app: FolderAppContent,
 ): DetailContent {
-  const detailCopy: Record<
-    FolderId,
-    Pick<DetailContent, "summary" | "actions">
-  > = {
-    projects: {
-      summary:
-        "Placeholder project detail view. Real project story, role, process, technologies, and outcomes will be added when portfolio content is imported.",
-      actions: [
-        { label: "Case Study", disabled: true },
-        { label: "Repository", disabled: true },
-      ],
-    },
-    education: {
-      summary:
-        "Placeholder education detail view. Real institution, program, coursework, and credential details will be added later.",
-      actions: [{ label: "Details", disabled: true }],
-    },
-    experience: {
-      summary:
-        "Placeholder experience detail view. Real role, company, responsibilities, timeline, and impact will be added later.",
-      actions: [{ label: "Highlights", disabled: true }],
-    },
-  };
+  if (folderId === "education") {
+    return {
+      kind: "education",
+      item:
+        education.find((item) => item.id === app.id) ??
+        ({
+          id: app.id,
+          title: app.label,
+          dateLabel: "",
+          gallery: [{ src: app.imageSrc, alt: `${app.label} artwork` }],
+          coursework: [],
+          activities: [],
+          honors: [],
+        } satisfies EducationItem),
+    };
+  }
 
-  const metadataByKind: Record<FolderId, DetailContent["metadata"]> = {
-    projects: [
-      { label: "Type", value: "Project placeholder" },
-      { label: "Status", value: "Content pending" },
-      { label: "Detail window", value: "Prototype only" },
-    ],
-    education: [
-      { label: "Type", value: "Education placeholder" },
-      { label: "Status", value: "Content pending" },
-      { label: "Detail window", value: "Prototype only" },
-    ],
-    experience: [
-      { label: "Type", value: "Experience placeholder" },
-      { label: "Status", value: "Content pending" },
-      { label: "Detail window", value: "Prototype only" },
-    ],
-  };
+  if (folderId === "experience") {
+    return {
+      kind: "experience",
+      item:
+        experience.find((item) => item.id === app.id) ??
+        ({
+          id: app.id,
+          title: app.label,
+          dateLabel: "",
+          description: "",
+          techStack: [],
+          gallery: [],
+        } satisfies ExperienceItem),
+    };
+  }
 
   return {
-    id: app.id,
-    kind: folderId,
-    title: app.label,
-    eyebrow: app.category ?? folderTitles[folderId],
-    imageSrc: app.imageSrc,
-    summary: detailCopy[folderId].summary,
-    metadata: metadataByKind[folderId],
-    actions: detailCopy[folderId].actions,
+    kind: "projects",
+    item:
+      projects.find((item) => item.id === app.id) ??
+      ({
+        id: app.id,
+        slug: app.id,
+        title: app.label,
+        shortDescription: "",
+        description: "",
+        role: "",
+        dateLabel: "",
+        context: "personal",
+        disciplines: [],
+        projectTypes: [],
+        techStack: [],
+        gallery: [{ src: app.imageSrc, alt: `${app.label} artwork` }],
+      } satisfies Project),
   };
 }
 
@@ -246,7 +250,7 @@ export function FolderLayer({
                   transition={layerTransition}
                 />
                 <motion.div
-                  key={selectedDetail.id}
+                  key={`${selectedDetail.kind}-${selectedDetail.item.id}`}
                   className="detail-window__motion"
                   variants={windowVariants}
                   initial="hidden"
@@ -387,6 +391,8 @@ export function FolderApp({
 export function DetailWindow({ detail, onClose }: DetailWindowProps) {
   const windowRef = useRef<HTMLElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const title = getDetailTitle(detail);
+  const eyebrow = getDetailEyebrow(detail.kind);
 
   useEffect(() => {
     closeButtonRef.current?.focus();
@@ -447,57 +453,319 @@ export function DetailWindow({ detail, onClose }: DetailWindowProps) {
           <span>Folder</span>
         </button>
         <div>
-          <p>{detail.eyebrow}</p>
-          <h2 id="detail-window-title">{detail.title}</h2>
+          <p>{eyebrow}</p>
+          <h2 id="detail-window-title">{title}</h2>
         </div>
         <button
           ref={closeButtonRef}
           type="button"
           className="detail-window__close"
           onClick={onClose}
-          aria-label={`Close ${detail.title} detail`}
+          aria-label={`Close ${title} detail`}
         >
           <X aria-hidden="true" className="size-5" />
         </button>
       </header>
 
       <div className="detail-window__content">
-        <div
-          className="detail-window__gallery"
-          aria-label={`${detail.title} placeholder gallery`}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element -- Detail placeholders must render as plain image assets. */}
-          <img src={detail.imageSrc} alt="" />
-          <div aria-hidden="true" />
-          <div aria-hidden="true" />
-        </div>
+        {detail.kind === "education" ? (
+          <EducationDetail item={detail.item} />
+        ) : null}
+        {detail.kind === "projects" ? <ProjectDetail item={detail.item} /> : null}
+        {detail.kind === "experience" ? (
+          <ExperienceDetail item={detail.item} />
+        ) : null}
+      </div>
+    </section>
+  );
+}
 
-        <div className="detail-window__body">
-          <p className="detail-window__summary">{detail.summary}</p>
+function getDetailEyebrow(kind: FolderId) {
+  if (kind === "projects") {
+    return "Project";
+  }
 
-          <dl className="detail-window__metadata">
-            {detail.metadata.map((item) => (
-              <div key={item.label}>
-                <dt>{item.label}</dt>
-                <dd>{item.value}</dd>
-              </div>
-            ))}
-          </dl>
+  if (kind === "education") {
+    return "Education";
+  }
 
-          <div className="detail-window__actions" aria-label="Detail actions">
-            {detail.actions.map((action) => (
+  return "Experience";
+}
+
+function getDetailTitle(detail: DetailContent) {
+  if (detail.kind === "education") {
+    return detail.item.subtitle
+      ? `${detail.item.title} / ${detail.item.subtitle}`
+      : detail.item.title;
+  }
+
+  if (detail.kind === "experience" && detail.item.organization) {
+    return `${detail.item.title} / ${detail.item.organization}`;
+  }
+
+  return detail.item.title;
+}
+
+function getEducationMedia(item: EducationItem): MediaItem[] {
+  if (item.gallery?.length) {
+    return item.gallery;
+  }
+
+  if (item.image) {
+    return [{ src: item.image, alt: `${item.title} artwork` }];
+  }
+
+  return [];
+}
+
+function EducationDetail({ item }: { item: EducationItem }) {
+  const media = getEducationMedia(item);
+
+  return (
+    <article className="detail-body">
+      {item.dateLabel ? <p className="detail-date">{item.dateLabel}</p> : null}
+      <MediaCarousel items={media} label={`${item.title} images`} />
+      <ChipSection title="Relevant coursework" items={item.coursework} />
+      <TextListSection title="Activities and societies" items={item.activities} />
+      <TextListSection title="Honors" items={item.honors} />
+    </article>
+  );
+}
+
+function ProjectDetail({ item }: { item: Project }) {
+  return (
+    <article className="detail-body">
+      <ChipSection title="Project type" items={item.projectTypes} tone="type" />
+      <MediaCarousel items={item.gallery} label={`${item.title} images`} />
+      {item.description ? (
+        <section className="detail-section">
+          <h3>Description</h3>
+          <p className="detail-copy">{item.description}</p>
+        </section>
+      ) : null}
+      <ChipSection title="Tech stack" items={item.techStack} />
+      {item.liveUrl || item.githubUrl ? (
+        <section className="detail-section">
+          <div className="detail-link-row">
+            {item.liveUrl ? (
+              <a href={item.liveUrl} target="_blank" rel="noopener noreferrer">
+                Live Demo
+                <span className="sr-only"> opens in a new tab</span>
+              </a>
+            ) : null}
+            {item.githubUrl ? (
+              <a href={item.githubUrl} target="_blank" rel="noopener noreferrer">
+                GitHub
+                <span className="sr-only"> opens in a new tab</span>
+              </a>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
+    </article>
+  );
+}
+
+function ExperienceDetail({ item }: { item: ExperienceItem }) {
+  return (
+    <article className="detail-body">
+      {item.dateLabel ? <p className="detail-date">{item.dateLabel}</p> : null}
+      <MediaCarousel
+        items={item.gallery ?? []}
+        label={`${item.title} images`}
+      />
+      {item.description ? (
+        <section className="detail-section">
+          <h3>Description</h3>
+          <p className="detail-copy">{item.description}</p>
+        </section>
+      ) : null}
+      <ChipSection title="Tech stack" items={item.techStack} />
+    </article>
+  );
+}
+
+function ChipSection({
+  title,
+  items,
+  tone,
+}: {
+  title: string;
+  items: string[];
+  tone?: "type";
+}) {
+  if (items.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="detail-section">
+      <h3>{title}</h3>
+      <div className={tone === "type" ? "detail-tags detail-tags--type" : "detail-tags"}>
+        {items.map((item) => (
+          <span key={item}>{item}</span>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function TextListSection({ title, items }: { title: string; items: string[] }) {
+  if (items.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="detail-section">
+      <h3>{title}</h3>
+      <ul className="detail-list">
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function MediaCarousel({
+  items,
+  label,
+}: {
+  items: MediaItem[];
+  label: string;
+}) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const dragState = useRef({ dragging: false, startX: 0, scrollLeft: 0 });
+  const hasMultipleItems = items.length > 1;
+
+  if (items.length === 0) {
+    return null;
+  }
+
+  const scrollToIndex = (nextIndex: number) => {
+    const boundedIndex = Math.min(items.length - 1, Math.max(0, nextIndex));
+    setActiveIndex(boundedIndex);
+    scrollerRef.current?.scrollTo({
+      left: scrollerRef.current.clientWidth * boundedIndex,
+      behavior: "smooth",
+    });
+  };
+
+  const handleScroll = () => {
+    const scroller = scrollerRef.current;
+
+    if (!scroller) {
+      return;
+    }
+
+    const nextIndex = Math.round(scroller.scrollLeft / scroller.clientWidth);
+    setActiveIndex(Math.min(items.length - 1, Math.max(0, nextIndex)));
+  };
+
+  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const scroller = scrollerRef.current;
+
+    if (!scroller || !hasMultipleItems) {
+      return;
+    }
+
+    dragState.current = {
+      dragging: true,
+      startX: event.clientX,
+      scrollLeft: scroller.scrollLeft,
+    };
+    scroller.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const scroller = scrollerRef.current;
+
+    if (!scroller || !dragState.current.dragging) {
+      return;
+    }
+
+    const delta = event.clientX - dragState.current.startX;
+    scroller.scrollLeft = dragState.current.scrollLeft - delta;
+  };
+
+  const handlePointerEnd = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const scroller = scrollerRef.current;
+    dragState.current.dragging = false;
+
+    if (scroller?.hasPointerCapture(event.pointerId)) {
+      scroller.releasePointerCapture(event.pointerId);
+    }
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!hasMultipleItems) {
+      return;
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      scrollToIndex(activeIndex + 1);
+    }
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      scrollToIndex(activeIndex - 1);
+    }
+  };
+
+  return (
+    <section className="detail-section media-carousel" aria-label={label}>
+      <div
+        ref={scrollerRef}
+        className="media-carousel__track"
+        tabIndex={hasMultipleItems ? 0 : undefined}
+        onKeyDown={handleKeyDown}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerEnd}
+        onPointerCancel={handlePointerEnd}
+        onScroll={handleScroll}
+      >
+        {items.map((item) => (
+          <figure key={item.src} className="media-carousel__slide">
+            {/* eslint-disable-next-line @next/next/no-img-element -- Portfolio media is data-driven and may be replaced by uploaded assets. */}
+            <img src={item.src} alt={item.alt} draggable={false} />
+            {item.caption ? <figcaption>{item.caption}</figcaption> : null}
+          </figure>
+        ))}
+      </div>
+
+      {hasMultipleItems ? (
+        <div className="media-carousel__controls">
+          <button
+            type="button"
+            onClick={() => scrollToIndex(activeIndex - 1)}
+            aria-label="Show previous image"
+          >
+            Previous
+          </button>
+          <div aria-label="Image pagination" className="media-carousel__dots">
+            {items.map((item, index) => (
               <button
-                key={action.label}
+                key={item.src}
                 type="button"
-                disabled={action.disabled}
-                aria-disabled={action.disabled}
-              >
-                {action.label}
-              </button>
+                className={index === activeIndex ? "is-active" : undefined}
+                onClick={() => scrollToIndex(index)}
+                aria-label={`Show image ${index + 1}`}
+                aria-current={index === activeIndex ? "true" : undefined}
+              />
             ))}
           </div>
+          <button
+            type="button"
+            onClick={() => scrollToIndex(activeIndex + 1)}
+            aria-label="Show next image"
+          >
+            Next
+          </button>
         </div>
-      </div>
+      ) : null}
     </section>
   );
 }

@@ -19,6 +19,12 @@ export interface Social {
   icon?: string;
 }
 
+export interface MediaItem {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
 export interface Screenshot {
   src: string;
   alt: string;
@@ -41,32 +47,35 @@ export interface Project {
   dateLabel: string;
   context: ProjectContext;
   disciplines: string[];
+  projectTypes: string[];
   techStack: string[];
+  gallery: MediaItem[];
   screenshots?: Screenshot[];
   githubUrl?: string;
   liveUrl?: string;
   featured?: boolean;
 }
 
-export interface Education {
+export interface EducationItem {
   id: string;
-  school: string;
-  degree: string;
-  field: string;
-  year: number;
-  endYear?: number;
-  description?: string;
+  title: string;
+  subtitle?: string;
+  dateLabel: string;
+  image?: string;
+  gallery?: MediaItem[];
+  coursework: string[];
+  activities: string[];
+  honors: string[];
 }
 
-export interface Experience {
+export interface ExperienceItem {
   id: string;
-  company: string;
-  role: string;
+  title: string;
+  organization?: string;
+  dateLabel: string;
   description: string;
-  technologies: string[];
-  startYear: number;
-  endYear?: number;
-  current?: boolean;
+  techStack: string[];
+  gallery?: MediaItem[];
 }
 
 export interface Skill {

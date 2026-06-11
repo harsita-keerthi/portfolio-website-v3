@@ -1,22 +1,43 @@
-import type { Experience } from "@/types";
+import type { ExperienceItem } from "@/types";
 
-export const experience: Experience[] = [
+export const experience: ExperienceItem[] = [
   {
-    id: "exp-1",
-    company: "Company Name",
-    role: "Engineer",
-    description: "Relevant work experience and accomplishments",
-    technologies: ["React", "TypeScript", "Node.js"],
-    startYear: 2022,
-    current: true,
+    id: "experience-1",
+    title: "Experience 01",
+    dateLabel: "",
+    description: "",
+    techStack: ["React", "TypeScript", "Node.js"],
+    gallery: [
+      {
+        src: "/placeholders/folders/experience/experience-01.svg",
+        alt: "Abstract placeholder artwork for Experience 01",
+      },
+      {
+        src: "/placeholders/folders/experience/experience-02.svg",
+        alt: "Second abstract placeholder artwork for Experience 01",
+      },
+    ],
   },
   {
-    id: "exp-2",
-    company: "Previous Company",
-    role: "Junior Engineer",
-    description: "Early career experience and learning",
-    technologies: ["JavaScript", "React"],
-    startYear: 2020,
-    endYear: 2022,
+    id: "experience-2",
+    title: "Experience 02",
+    dateLabel: "",
+    description: "",
+    techStack: ["JavaScript", "React"],
+    gallery: [],
+  },
+  {
+    id: "experience-3",
+    title: "Experience 03",
+    dateLabel: "",
+    description: "",
+    techStack: [],
+  },
+  {
+    id: "experience-4",
+    title: "Experience 04",
+    dateLabel: "",
+    description: "",
+    techStack: [],
   },
 ];
