@@ -57,6 +57,20 @@ export function HomeScreen({ profile, content, dockItems }: HomeScreenProps) {
     });
   };
 
+  const openItem = (itemId: string) => {
+    setUiState((currentState) => ({
+      ...currentState,
+      openItemId: itemId,
+    }));
+  };
+
+  const closeItem = () => {
+    setUiState((currentState) => ({
+      ...currentState,
+      openItemId: null,
+    }));
+  };
+
   return (
     <section
       data-home-screen="true"
@@ -76,7 +90,13 @@ export function HomeScreen({ profile, content, dockItems }: HomeScreenProps) {
         <Dock items={dockItems} onOpenFolder={openFolder} />
       </div>
 
-      <FolderLayer openFolder={uiState.openFolder} onClose={closeFolder} />
+      <FolderLayer
+        openFolder={uiState.openFolder}
+        openItemId={uiState.openItemId}
+        onClose={closeFolder}
+        onOpenItem={openItem}
+        onCloseItem={closeItem}
+      />
     </section>
   );
 }
