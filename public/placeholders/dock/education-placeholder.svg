@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Education placeholder</title>
+  <desc id="desc">Abstract teal and blue rounded-square education image placeholder.</desc>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="14" x2="142" y2="146" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f766e"/>
+      <stop offset="0.52" stop-color="#0891b2"/>
+      <stop offset="1" stop-color="#312e81"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(48 38) rotate(42) scale(96)">
+      <stop stop-color="#a7f3d0" stop-opacity="0.78"/>
+      <stop offset="1" stop-color="#a7f3d0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="160" height="160" rx="34" fill="url(#bg)"/>
+  <rect width="160" height="160" rx="34" fill="url(#glow)"/>
+  <path d="M39 66 80 45l41 21-41 21z" fill="#ecfeff" opacity="0.9"/>
+  <path d="M55 80v21c0 9 50 9 50 0V80" fill="none" stroke="#cffafe" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.86"/>
+  <path d="M121 68v28" fill="none" stroke="#fef3c7" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="121" cy="104" r="8" fill="#fef3c7"/>
+</svg>

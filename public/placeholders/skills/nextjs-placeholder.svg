@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Next.js skill placeholder</title>
+  <desc id="desc">Abstract slate and cyan rounded-square skill image.</desc>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="18" x2="142" y2="142" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f172a"/>
+      <stop offset="0.56" stop-color="#134e4a"/>
+      <stop offset="1" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="34" fill="url(#bg)"/>
+  <circle cx="80" cy="80" r="43" fill="none" stroke="#ecfeff" stroke-width="9"/>
+  <path d="M58 106V55l48 55V55" fill="none" stroke="#f8fafc" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M100 99 120 119" fill="none" stroke="#67e8f9" stroke-width="9" stroke-linecap="round"/>
+</svg>

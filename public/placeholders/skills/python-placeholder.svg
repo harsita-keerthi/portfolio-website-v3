@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Python skill placeholder</title>
+  <desc id="desc">Abstract blue and green rounded-square skill image.</desc>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="14" x2="142" y2="146" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38bdf8"/>
+      <stop offset="0.52" stop-color="#10b981"/>
+      <stop offset="1" stop-color="#14532d"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(50 42) rotate(42) scale(102)">
+      <stop stop-color="#ecfeff" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#ecfeff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="160" height="160" rx="34" fill="url(#bg)"/>
+  <rect width="160" height="160" rx="34" fill="url(#glow)"/>
+  <path d="M47 61c7-17 27-25 45-17 13 6 18 17 13 32l-4 12c-5 15 1 24 18 27" fill="none" stroke="#ecfeff" stroke-width="11" stroke-linecap="round"/>
+  <path d="M113 98c-7 17-27 25-45 17-13-6-18-17-13-32l4-12c5-15-1-24-18-27" fill="none" stroke="#d1fae5" stroke-width="11" stroke-linecap="round" opacity="0.88"/>
+  <circle cx="65" cy="57" r="6" fill="#064e3b"/>
+  <circle cx="95" cy="103" r="6" fill="#0c4a6e"/>
+</svg>

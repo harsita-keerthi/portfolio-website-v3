@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Projects placeholder</title>
+  <desc id="desc">Abstract green, cyan, and purple rounded-square projects image placeholder.</desc>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="16" x2="142" y2="144" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#064e3b"/>
+      <stop offset="0.5" stop-color="#0e7490"/>
+      <stop offset="1" stop-color="#7e22ce"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="34" fill="url(#bg)"/>
+  <rect x="34" y="38" width="92" height="32" rx="12" fill="#ecfeff" opacity="0.86"/>
+  <rect x="34" y="82" width="40" height="40" rx="12" fill="#bbf7d0" opacity="0.84"/>
+  <rect x="86" y="82" width="40" height="40" rx="12" fill="#f0abfc" opacity="0.74"/>
+  <path d="M50 55h48" stroke="#0f172a" stroke-width="7" stroke-linecap="round" opacity="0.55"/>
+  <path d="M49 102h10m42 0h10" stroke="#0f172a" stroke-width="7" stroke-linecap="round" opacity="0.42"/>
+  <circle cx="124" cy="42" r="14" fill="#67e8f9" opacity="0.75"/>
+</svg>

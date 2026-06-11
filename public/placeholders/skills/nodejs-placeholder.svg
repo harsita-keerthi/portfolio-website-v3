@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Node.js skill placeholder</title>
+  <desc id="desc">Abstract green rounded-square skill image.</desc>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="16" x2="142" y2="144" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#bbf7d0"/>
+      <stop offset="0.45" stop-color="#22c55e"/>
+      <stop offset="1" stop-color="#166534"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="34" fill="url(#bg)"/>
+  <path d="m80 35 39 22v46l-39 22-39-22V57z" fill="#052e16" opacity="0.82"/>
+  <path d="M59 102V61l42 42V61" fill="none" stroke="#dcfce7" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="119" cy="44" r="12" fill="#67e8f9" opacity="0.76"/>
+</svg>

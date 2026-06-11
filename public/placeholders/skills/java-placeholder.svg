@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Java skill placeholder</title>
+  <desc id="desc">Abstract coral and indigo rounded-square skill image.</desc>
+  <defs>
+    <linearGradient id="bg" x1="20" y1="16" x2="140" y2="144" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fb7185"/>
+      <stop offset="0.5" stop-color="#f97316"/>
+      <stop offset="1" stop-color="#4338ca"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="34" fill="url(#bg)"/>
+  <path d="M50 113c18 9 43 9 62 0" fill="none" stroke="#fff7ed" stroke-width="10" stroke-linecap="round"/>
+  <path d="M58 90c14 7 31 7 45 0" fill="none" stroke="#fed7aa" stroke-width="8" stroke-linecap="round" opacity="0.95"/>
+  <path d="M73 71c-8-11 16-16 7-29" fill="none" stroke="#fff7ed" stroke-width="8" stroke-linecap="round"/>
+  <path d="M91 73c-8-10 15-15 8-28" fill="none" stroke="#ffedd5" stroke-width="7" stroke-linecap="round" opacity="0.85"/>
+  <circle cx="116" cy="46" r="13" fill="#fde68a" opacity="0.78"/>
+</svg>

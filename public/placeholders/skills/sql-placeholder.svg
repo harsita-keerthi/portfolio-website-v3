@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">SQL skill placeholder</title>
+  <desc id="desc">Abstract teal and indigo rounded-square skill image.</desc>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="14" x2="142" y2="146" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2dd4bf"/>
+      <stop offset="0.52" stop-color="#0ea5e9"/>
+      <stop offset="1" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="34" fill="url(#bg)"/>
+  <ellipse cx="80" cy="51" rx="42" ry="17" fill="#ecfeff" opacity="0.95"/>
+  <path d="M38 51v54c0 9 19 17 42 17s42-8 42-17V51" fill="none" stroke="#ecfeff" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M38 78c0 9 19 17 42 17s42-8 42-17" fill="none" stroke="#172554" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
+  <path d="M38 104c0 9 19 17 42 17s42-8 42-17" fill="none" stroke="#172554" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
+</svg>
