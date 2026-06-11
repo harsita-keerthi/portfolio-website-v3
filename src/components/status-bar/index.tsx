@@ -39,11 +39,10 @@ export function StatusBar() {
       </div>
 
       <div className="flex items-center gap-4">
-        <span className="inline-flex items-center gap-1.5">
+        <span className="inline-flex items-center gap-1.5" aria-label="Wi-Fi connected">
           <span className="wifi-indicator" aria-hidden="true">
             <span />
           </span>
-          <span>Wi-Fi</span>
         </span>
         <span className="inline-flex items-center gap-1.5">
           <span className="battery-indicator" aria-hidden="true">

@@ -29,12 +29,9 @@ interface GlassWidgetProps {
 }
 
 const glassToneStyles: Record<GlassTone, string> = {
-  primary:
-    "border-white/15 bg-white/10 shadow-black/20 before:from-white/15 before:to-white/5",
-  panel:
-    "border-white/15 bg-white/10 shadow-black/20 before:from-cyan-100/15 before:to-white/5",
-  utility:
-    "border-white/15 bg-white/10 shadow-black/20 before:from-teal-100/15 before:to-pink-100/5",
+  primary: "glass-tone-primary",
+  panel: "glass-tone-panel",
+  utility: "glass-tone-utility",
 };
 
 const skillPlaceholderByLabel: Record<string, string> = {
@@ -109,7 +106,7 @@ export function GlassWidget({
     <section
       aria-label={ariaLabel}
       className={classNames(
-        "relative isolate overflow-hidden rounded-[1.35rem] border text-slate-50 shadow-2xl backdrop-blur-2xl before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-gradient-to-br before:opacity-100 after:pointer-events-none after:absolute after:inset-[1px] after:-z-10 after:rounded-[1.28rem] after:border after:border-white/10",
+        "glass-widget relative isolate overflow-hidden border text-slate-50 backdrop-blur-2xl before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-gradient-to-br before:opacity-70 after:pointer-events-none after:absolute after:inset-x-0 after:top-0 after:-z-10 after:h-px after:bg-white/10",
         glassToneStyles[tone],
         className,
       )}
@@ -130,9 +127,9 @@ export function ProfileWidget({
     <GlassWidget
       tone="primary"
       ariaLabel="Profile"
-      className="home-profile min-h-[250px] p-5 md:min-h-0"
+      className="home-profile"
     >
-      <div className="flex h-full flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="profile-widget__content">
         <div className="max-w-[32rem]">
           <h1 className="text-4xl font-semibold leading-none tracking-normal text-white lg:text-[2.85rem]">
             {profile.name}
@@ -143,14 +140,14 @@ export function ProfileWidget({
           <p className="mt-4 max-w-xl text-base font-normal leading-6 text-slate-100/95">
             {content.body}
           </p>
-          <p className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 text-base font-medium text-slate-50">
+          <p className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 text-base font-medium text-slate-50">
             <MapPin aria-hidden="true" className="size-4 text-cyan-100" />
             {profile.location}
           </p>
         </div>
 
-        <div className="relative mx-auto flex size-36 shrink-0 items-center justify-center rounded-[1.35rem] border border-white/15 bg-white/10 shadow-2xl shadow-emerald-950/25 backdrop-blur-xl sm:mx-0 md:size-[34%] md:max-h-44 md:min-h-[8.5rem] md:min-w-[8.5rem]">
-          <div className="absolute inset-3 rounded-[1.1rem] bg-[radial-gradient(circle_at_32%_20%,rgba(204,251,241,0.9),transparent_27%),radial-gradient(circle_at_72%_34%,rgba(216,180,254,0.72),transparent_30%),linear-gradient(145deg,rgba(6,78,59,0.95),rgba(20,184,166,0.78)_58%,rgba(30,64,175,0.76))]" />
+        <div className="profile-widget__image relative mx-auto flex shrink-0 items-center justify-center rounded-[1.15rem] border border-white/10 bg-white/10 shadow-2xl shadow-emerald-950/20 backdrop-blur-xl sm:mx-0">
+          <div className="absolute inset-3 rounded-[0.95rem] bg-[radial-gradient(circle_at_32%_20%,rgba(204,251,241,0.9),transparent_27%),radial-gradient(circle_at_72%_34%,rgba(216,180,254,0.72),transparent_30%),linear-gradient(145deg,rgba(6,78,59,0.95),rgba(20,184,166,0.78)_58%,rgba(30,64,175,0.76))]" />
           <div
             aria-hidden="true"
             className="relative size-24 rounded-full bg-emerald-950/85 shadow-inner shadow-white/20 sm:size-28"
@@ -295,13 +292,15 @@ export function CollageWidget() {
 export function SkillsWidget({ content }: { content: WidgetList }) {
   return (
     <GlassWidget tone="panel" ariaLabel={content.title} className="home-skills min-h-0">
-      <h2 className="mb-5 text-xl font-medium leading-none text-white">
+      <h2 className="text-xl font-medium leading-none text-white">
         {content.title}
       </h2>
-      <div className="skills-grid">
-        {content.items.slice(0, 10).map((skill) => (
-          <SkillItem key={skill} label={skill} />
-        ))}
+      <div className="skills-panel">
+        <div className="skills-grid">
+          {content.items.slice(0, 10).map((skill) => (
+            <SkillItem key={skill} label={skill} />
+          ))}
+        </div>
       </div>
     </GlassWidget>
   );
@@ -311,7 +310,7 @@ export function SkillItem({ label }: { label: string }) {
   const imageSrc = skillPlaceholderByLabel[label];
 
   return (
-    <div className="skill-app group" tabIndex={0} aria-label={label}>
+    <div className="skill-item" aria-label={label}>
       {/* eslint-disable-next-line @next/next/no-img-element -- Skill placeholders must render as plain img elements. */}
       <img src={imageSrc} alt={label} />
       <span>{label}</span>
@@ -333,7 +332,7 @@ export function ResumeWidget({
     <GlassWidget
       tone="utility"
       ariaLabel={content.title}
-      className="resume-widget min-h-36 p-5 md:min-h-40"
+      className="resume-widget min-h-36 md:min-h-33"
     >
       <div className="resume-content">
         <div className="resume-copy text-left">
