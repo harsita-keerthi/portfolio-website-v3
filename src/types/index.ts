@@ -73,6 +73,7 @@ export interface ExperienceItem {
   title: string;
   organization?: string;
   dateLabel: string;
+  location?: string;
   description: string;
   techStack: string[];
   gallery?: MediaItem[];

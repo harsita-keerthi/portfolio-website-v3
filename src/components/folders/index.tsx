@@ -8,7 +8,7 @@ import {
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
-import { ChevronLeft, X } from "lucide-react";
+import { ChevronLeft, MapPin, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { education } from "@/data/education";
 import { experience } from "@/data/experience";
@@ -58,6 +58,12 @@ const folderTitles: Record<FolderId, string> = {
   experience: "Experience",
 };
 
+function getExperienceArtwork(index: number) {
+  const appNumber = (index % 12) + 1;
+
+  return `/placeholders/folders/experience/experience-${String(appNumber).padStart(2, "0")}.svg`;
+}
+
 const folderAppsById: Record<FolderId, FolderAppContent[]> = {
   projects: Array.from({ length: 10 }, (_, index) => {
     const appNumber = index + 1;
@@ -72,33 +78,29 @@ const folderAppsById: Record<FolderId, FolderAppContent[]> = {
   education: [
     {
       id: "university",
-      label: "University",
-      category: "Education",
+      label: "SJSU",
+      category: "Bachelors",
       imageSrc: "/placeholders/folders/education/university.svg",
     },
     {
       id: "additional-program",
-      label: "Additional Program",
-      category: "Program",
+      label: "GTech",
+      category: "Masters",
       imageSrc: "/placeholders/folders/education/additional-program.svg",
     },
     {
       id: "certification",
-      label: "Certification",
-      category: "Credential",
+      label: "Cornell Tech",
+      category: "Certification",
       imageSrc: "/placeholders/folders/education/certification.svg",
     },
   ],
-  experience: Array.from({ length: 4 }, (_, index) => {
-    const appNumber = index + 1;
-
-    return {
-      id: `experience-${appNumber}`,
-      label: `Experience ${String(appNumber).padStart(2, "0")}`,
-      category: "Placeholder",
-      imageSrc: `/placeholders/folders/experience/experience-${String(appNumber).padStart(2, "0")}.svg`,
-    };
-  }),
+  experience: experience.map((item, index) => ({
+    id: item.id,
+    label: item.title,
+    category: item.dateLabel,
+    imageSrc: item.gallery?.[0]?.src ?? getExperienceArtwork(index),
+  })),
 };
 
 const focusableSelector = [
@@ -140,6 +142,7 @@ function getDetailContent(
           id: app.id,
           title: app.label,
           dateLabel: "",
+          location: "",
           description: "",
           techStack: [],
           gallery: [],
@@ -567,9 +570,21 @@ function ProjectDetail({ item }: { item: Project }) {
 }
 
 function ExperienceDetail({ item }: { item: ExperienceItem }) {
+  const hasTopDetails = item.dateLabel || item.location;
+
   return (
     <article className="detail-body">
-      {item.dateLabel ? <p className="detail-date">{item.dateLabel}</p> : null}
+      {hasTopDetails ? (
+        <div className="detail-topline">
+          {item.dateLabel ? <span>{item.dateLabel}</span> : null}
+          {item.location ? (
+            <span className="detail-location-pill">
+              <MapPin aria-hidden="true" className="size-5" />
+              {item.location}
+            </span>
+          ) : null}
+        </div>
+      ) : null}
       <MediaCarousel
         items={item.gallery ?? []}
         label={`${item.title} images`}
