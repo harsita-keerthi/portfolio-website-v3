@@ -95,7 +95,14 @@ export interface HomeWidgetContent {
   resume: ResumeContent;
 }
 
+export type FolderId = "education" | "projects" | "experience";
+
+export interface PortfolioUIState {
+  openFolder: FolderId | null;
+  openItemId: string | null;
+}
+
 export interface DockItemContent {
-  id: "education" | "projects" | "experience";
+  id: FolderId;
   label: string;
 }
