@@ -123,6 +123,8 @@ export function ProfileWidget({
   profile: Profile;
   content: ProfileContent;
 }) {
+  const [hasHomeImageError, setHasHomeImageError] = useState(false);
+
   return (
     <GlassWidget
       tone="primary"
@@ -146,16 +148,28 @@ export function ProfileWidget({
           </p>
         </div>
 
-        <div className="profile-widget__image relative mx-auto flex shrink-0 items-center justify-center rounded-[1.15rem] border border-white/10 bg-white/10 shadow-2xl shadow-emerald-950/20 backdrop-blur-xl sm:mx-0">
-          <div className="absolute inset-3 rounded-[0.95rem] bg-[radial-gradient(circle_at_32%_20%,rgba(204,251,241,0.9),transparent_27%),radial-gradient(circle_at_72%_34%,rgba(216,180,254,0.72),transparent_30%),linear-gradient(145deg,rgba(6,78,59,0.95),rgba(20,184,166,0.78)_58%,rgba(30,64,175,0.76))]" />
-          <div
-            aria-hidden="true"
-            className="relative size-24 rounded-full bg-emerald-950/85 shadow-inner shadow-white/20 sm:size-28"
-          >
-            <div className="absolute left-1/2 top-7 h-9 w-16 -translate-x-1/2 rounded-full bg-cyan-50/90" />
-            <div className="absolute bottom-4 left-1/2 h-10 w-24 -translate-x-1/2 rounded-t-full bg-cyan-50/90" />
-          </div>
-          <span className="sr-only">Illustrated placeholder profile image for Harsita</span>
+        <div className="profile-widget__image relative mx-auto flex shrink-0 items-center justify-center overflow-hidden rounded-[1.15rem] border border-white/10 bg-white/10 shadow-2xl shadow-emerald-950/20 backdrop-blur-xl sm:mx-0">
+          {profile.homeProfileImage && !hasHomeImageError ? (
+            // eslint-disable-next-line @next/next/no-img-element -- Profile images are user-managed files in public/.
+            <img
+              src={profile.homeProfileImage}
+              alt={`Portrait of ${profile.name}`}
+              className="size-full object-cover"
+              onError={() => setHasHomeImageError(true)}
+            />
+          ) : (
+            <>
+              <div className="absolute inset-3 rounded-[0.95rem] bg-[radial-gradient(circle_at_32%_20%,rgba(204,251,241,0.9),transparent_27%),radial-gradient(circle_at_72%_34%,rgba(216,180,254,0.72),transparent_30%),linear-gradient(145deg,rgba(6,78,59,0.95),rgba(20,184,166,0.78)_58%,rgba(30,64,175,0.76))]" />
+              <div
+                aria-hidden="true"
+                className="relative size-24 rounded-full bg-emerald-950/85 shadow-inner shadow-white/20 sm:size-28"
+              >
+                <div className="absolute left-1/2 top-7 h-9 w-16 -translate-x-1/2 rounded-full bg-cyan-50/90" />
+                <div className="absolute bottom-4 left-1/2 h-10 w-24 -translate-x-1/2 rounded-t-full bg-cyan-50/90" />
+              </div>
+              <span className="sr-only">Illustrated placeholder profile image for {profile.name}</span>
+            </>
+          )}
         </div>
       </div>
     </GlassWidget>
@@ -163,11 +177,36 @@ export function ProfileWidget({
 }
 
 const collageSlides = [
-  "Project",
-  "Campus",
-  "Build",
-  "Research",
-  "Launch",
+  {
+    label: "CalHacks",
+    src: "/placeholders/collage/calhacks.png",
+    alt: "CalHacks",
+  },
+  {
+    label: "Atlassian SFO",
+    src: "/placeholders/collage/meatatlassian.png",
+    alt: "Me at Atlassian SF Office",
+  },
+  {
+    label: "Girls Who Code",
+    src: "/placeholders/collage/gwc-art.png",
+    alt: "Girls Who Code",
+  },
+  {
+    label: "NVIDIA GTC",
+    src: "/placeholders/collage/nvidiagtc.png",
+    alt: "NVIDIA GTC",
+  },
+  {
+    label: "Make With Notion",
+    src: "/placeholders/collage/notion.png",
+    alt: "Make with Notion",
+  },
+  {
+    label: "HackDavis",
+    src: "/placeholders/collage/hackdavis.png",
+    alt: "HackDavis",
+  },
 ];
 
 export function CollageWidget() {
@@ -240,44 +279,30 @@ export function CollageWidget() {
         onPointerCancel={handlePointerEnd}
         onScroll={handleScroll}
       >
-        {collageSlides.map((label, index) => (
+        {collageSlides.map((slide, index) => (
           <div
-            key={label}
+            key={slide.label}
             className="relative size-full shrink-0 snap-center overflow-hidden rounded-[0.95rem] border border-white/10 bg-slate-950/20"
-            aria-label={`${label} placeholder ${index + 1}`}
+            aria-label={`${slide.label} collage image ${index + 1}`}
           >
-            <div
-              className={classNames(
-                "absolute inset-0",
-                index === 0 &&
-                  "bg-[radial-gradient(circle_at_26%_22%,rgba(45,212,191,0.7),transparent_30%),linear-gradient(145deg,rgba(6,78,59,0.86),rgba(15,23,42,0.62))]",
-                index === 1 &&
-                  "bg-[radial-gradient(circle_at_72%_28%,rgba(196,181,253,0.68),transparent_32%),linear-gradient(145deg,rgba(15,118,110,0.72),rgba(30,41,59,0.72))]",
-                index === 2 &&
-                  "bg-[radial-gradient(circle_at_36%_70%,rgba(96,165,250,0.68),transparent_35%),linear-gradient(145deg,rgba(20,83,45,0.72),rgba(15,23,42,0.68))]",
-                index === 3 &&
-                  "bg-[radial-gradient(circle_at_66%_65%,rgba(244,114,182,0.42),transparent_35%),linear-gradient(145deg,rgba(6,95,70,0.76),rgba(49,46,129,0.62))]",
-                index === 4 &&
-                  "bg-[radial-gradient(circle_at_28%_26%,rgba(125,211,252,0.62),transparent_30%),linear-gradient(145deg,rgba(19,78,74,0.76),rgba(88,28,135,0.58))]",
-              )}
+            {/* eslint-disable-next-line @next/next/no-img-element -- Collage placeholders should be simple replaceable image files. */}
+            <img
+              src={slide.src}
+              alt={slide.alt}
+              className="size-full object-cover"
+              draggable={false}
             />
-            <div className="absolute inset-4 grid grid-cols-3 grid-rows-3 gap-3">
-              <span className="col-span-2 rounded-xl border border-white/15 bg-white/10 backdrop-blur-md" />
-              <span className="rounded-xl border border-white/15 bg-white/20 backdrop-blur-md" />
-              <span className="row-span-2 rounded-xl border border-white/15 bg-white/10 backdrop-blur-md" />
-              <span className="col-span-2 rounded-xl border border-white/15 bg-white/15 backdrop-blur-md" />
-              <span className="col-span-2 rounded-xl border border-white/15 bg-white/10 backdrop-blur-md" />
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/38 via-transparent to-white/5" />
             <p className="absolute bottom-5 left-5 rounded-full border border-white/15 bg-slate-950/30 px-3 py-1 text-sm font-medium text-white backdrop-blur-md">
-              {label}
+              {slide.label}
             </p>
           </div>
         ))}
       </div>
       <div className="absolute bottom-5 right-5 flex gap-1.5">
-        {collageSlides.map((label, index) => (
+        {collageSlides.map((slide, index) => (
           <span
-            key={label}
+            key={slide.label}
             className={classNames(
               "size-1.5 rounded-full bg-white/40",
               activeSlide === index && "w-5 bg-white/80",
@@ -325,6 +350,7 @@ export function ResumeWidget({
   content: ResumeContent;
   resumeUrl?: string;
 }) {
+  const activeResumeUrl = resumeUrl ?? "/Harsita_Keerthikanth_SWE_Resume.pdf";
   const actionClass =
     "resume-action inline-flex items-center justify-center rounded-full border text-sm font-medium transition duration-200 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-3 focus-visible:outline-cyan-100 motion-reduce:transition-none";
 
@@ -339,45 +365,21 @@ export function ResumeWidget({
           <h2 className="text-xl font-medium text-white">{content.title}</h2>
 
           <div className="resume-actions">
-            {resumeUrl ? (
-              <>
-                <a
-                  href={resumeUrl}
-                  className={`${actionClass} border-cyan-100/20 bg-cyan-50/15 text-white hover:bg-cyan-50/20`}
-                >
-                  <Eye aria-hidden="true" className="size-4" />
-                  {content.viewLabel}
-                </a>
-                <a
-                  href={resumeUrl}
-                  download
-                  className={`${actionClass} border-white/15 bg-white/10 text-white hover:bg-white/15`}
-                >
-                  <ArrowDownToLine aria-hidden="true" className="size-4" />
-                  {content.downloadLabel}
-                </a>
-              </>
-            ) : (
-              <>
-                {/* TODO: Enable these actions when a real resume PDF is imported. */}
-                <button
-                  type="button"
-                  disabled
-                  className={`${actionClass} cursor-not-allowed border-white/10 bg-white/10 text-slate-300/70`}
-                >
-                  <Eye aria-hidden="true" className="size-4" />
-                  {content.viewLabel}
-                </button>
-                <button
-                  type="button"
-                  disabled
-                  className={`${actionClass} cursor-not-allowed border-white/10 bg-white/10 text-slate-300/70`}
-                >
-                  <ArrowDownToLine aria-hidden="true" className="size-4" />
-                  {content.downloadLabel}
-                </button>
-              </>
-            )}
+            <a
+              href={activeResumeUrl}
+              className={`${actionClass} border-cyan-100/20 bg-cyan-50/15 text-white hover:bg-cyan-50/20`}
+            >
+              <Eye aria-hidden="true" className="size-4" />
+              {content.viewLabel}
+            </a>
+            <a
+              href={activeResumeUrl}
+              download
+              className={`${actionClass} border-white/15 bg-white/10 text-white hover:bg-white/15`}
+            >
+              <ArrowDownToLine aria-hidden="true" className="size-4" />
+              {content.downloadLabel}
+            </a>
           </div>
         </div>
 

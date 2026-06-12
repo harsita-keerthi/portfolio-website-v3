@@ -61,6 +61,7 @@ function getUnlockThreshold() {
 export function LockScreen({ profile, onEnter }: LockScreenProps) {
   const [now, setNow] = useState(() => new Date());
   const [isLeaving, setIsLeaving] = useState(false);
+  const [hasLockImageError, setHasLockImageError] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const y = useMotionValue(0);
   const reducedOpacity = useMotionValue(1);
@@ -223,16 +224,28 @@ export function LockScreen({ profile, onEnter }: LockScreenProps) {
         </div>
 
         <div className="flex w-full max-w-[340px] flex-col items-center">
-          <div className="relative flex aspect-square w-48 items-center justify-center rounded-[2rem] border border-white/30 bg-white/20 shadow-2xl shadow-emerald-950/30 backdrop-blur-xl sm:w-60">
-            <div className="absolute inset-4 rounded-[1.5rem] bg-[radial-gradient(circle_at_35%_28%,#fef3c7,transparent_28%),radial-gradient(circle_at_68%_36%,#f9a8d4,transparent_30%),linear-gradient(145deg,#a7f3d0,#67e8f9_52%,#c4b5fd)]" />
-            <div
-              aria-hidden="true"
-              className="relative h-24 w-24 rounded-full bg-emerald-950/80 shadow-inner shadow-white/20 sm:h-32 sm:w-32"
-            >
-              <div className="absolute left-1/2 top-8 h-9 w-16 -translate-x-1/2 rounded-full bg-white/85 sm:top-10 sm:h-11 sm:w-20" />
-              <div className="absolute bottom-4 left-1/2 h-10 w-24 -translate-x-1/2 rounded-t-full bg-white/85 sm:h-12 sm:w-28" />
-            </div>
-            <span className="sr-only">Illustrated placeholder avatar for Harsita</span>
+          <div className="relative flex aspect-square w-48 items-center justify-center overflow-hidden rounded-[2rem] border border-white/30 bg-white/20 shadow-2xl shadow-emerald-950/30 backdrop-blur-xl sm:w-60">
+            {profile.lockScreenImage && !hasLockImageError ? (
+              // eslint-disable-next-line @next/next/no-img-element -- Profile images are user-managed files in public/.
+              <img
+                src={profile.lockScreenImage}
+                alt={`Portrait of ${profile.name}`}
+                className="size-full object-cover"
+                onError={() => setHasLockImageError(true)}
+              />
+            ) : (
+              <>
+                <div className="absolute inset-4 rounded-[1.5rem] bg-[radial-gradient(circle_at_35%_28%,#fef3c7,transparent_28%),radial-gradient(circle_at_68%_36%,#f9a8d4,transparent_30%),linear-gradient(145deg,#a7f3d0,#67e8f9_52%,#c4b5fd)]" />
+                <div
+                  aria-hidden="true"
+                  className="relative h-24 w-24 rounded-full bg-emerald-950/80 shadow-inner shadow-white/20 sm:h-32 sm:w-32"
+                >
+                  <div className="absolute left-1/2 top-8 h-9 w-16 -translate-x-1/2 rounded-full bg-white/85 sm:top-10 sm:h-11 sm:w-20" />
+                  <div className="absolute bottom-4 left-1/2 h-10 w-24 -translate-x-1/2 rounded-t-full bg-white/85 sm:h-12 sm:w-28" />
+                </div>
+                <span className="sr-only">Illustrated placeholder avatar for {profile.name}</span>
+              </>
+            )}
           </div>
 
           <button
@@ -257,9 +270,6 @@ export function SwipeToUnlock({ onEnter }: SwipeToUnlockProps) {
       type="button"
       onClick={onEnter}
       className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white/90 transition duration-200 hover:bg-white/10 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-3 focus-visible:outline-white motion-reduce:transition-none"
-    >
-      <ChevronsUp aria-hidden="true" className="size-4" />
-      Drag, wheel, or press Enter
-    </button>
+    ></button>
   );
 }

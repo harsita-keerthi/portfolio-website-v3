@@ -7,7 +7,8 @@ export interface Profile {
   role: string;
   introduction: string;
   location: string;
-  profileImage?: string;
+  lockScreenImage?: string;
+  homeProfileImage?: string;
   socials: Social[];
   email?: string;
   resumeUrl?: string;
